@@ -93,10 +93,13 @@ def extract_movie_titles(file_path):
             html_doc=file.read()
         soup=BeautifulSoup(html_doc,"html.parser")
         movies=soup.find_all('div',class_="article_movie_title")
-
+        title_count=0
         for movie in movies:
             title_element=movie.find('a')
             if title_element:
                 print(title_element.text.strip())
+                title_count+=1
+                if title_count>=50:
+                    break
     except Exception as e:
         print("Error:",e)

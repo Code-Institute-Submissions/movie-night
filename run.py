@@ -28,6 +28,14 @@ during file operations and network requests.
 """
 
 def scrapMyWeb(web_address):
+
+    """
+    Downloads the webpage content from the provided URL, saves it to an HTML file.
+    In case user runs the code twice, it prompts the user to either use the same html file,
+    or create a new one in order to make sure that the user has already run the file twice.  
+
+    """
+
     try:
         current_directory=os.getcwd()
         html_files=[]
@@ -43,15 +51,52 @@ def scrapMyWeb(web_address):
                 user_choice=input("\nUse existing file (enter number) or create new (enter 'n'): ")
                 if user_choice.lower()!='n':
                     file_path=os.path.join(current_directory,html_files[int(user_choice)-1])
+                    extract_movie_titles(file_path)
                     return
                 else:
-                    save_location = input("Enter the desired filename: \n")  
+                    save_location=input("Enter the desired filename: \n")  
                     if not save_location.endswith(".html"):
-                        save_location += ".html" 
-    
-
+                        save_location+=".html" 
+            else:
+                save_location=input("Enter the desired filename: \n")  
+                if not save_location.endswith(".html"):
+                    save_location+=".html"
+        else:
+                save_location=input("Enter the desired filename: \n")  
+                if not save_location.endswith(".html"):
+                    save_location+=".html"
+        
+        response = requests.get(web_address)
+        response.raise_for_status()
+        with open(save_location, "w") as file:
+            file.write(response.text)
+      
+        print(f"Downloaded webpage content saved to: {save_location}\n")
+        extract_movie_titles(save_location) 
+   
     except requests.exceptions.RequestException as shownerror:
         print("Error downloading webpage:",shownerror)
     except (FileNotFoundError, IOError) as shownerror:
         print("Error handling file:",shownerror)
 
+
+
+def extract_movie_titles(file_path):
+
+    """
+    Use BeautifulSoup to read and return the movie titles from the saved HTML file.
+    """
+
+    print("\nThe Top Best Movies of 2023 Are:\n")
+    try:
+        with open(file_path,"r") as file:
+            html_doc=file.read()
+        soup=BeautifulSoup(html_doc,"html.parser")
+        movies=soup.find_all('div',class_="article_movie_title")
+
+        for movie in movies:
+            title_element=movie.find('a')
+            if title_element:
+                print(title_element.text.strip())
+    except Exception as e:
+        print("Error:",e)

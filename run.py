@@ -2,6 +2,31 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
+"""
+
+This Python script scrapes movie titles from a Rotten Tomatoes "Best Movies of the Year" webpage
+and filters the list to give the 50 best movies out of a list of more then 150 
+and saves the downloaded HTML content. 
+
+It offers the user choices to:
+1. Use an existing .html file containing the desired webpage content (for in case,if user ran the script twice).
+2. Create a new .html file by downloading the webpage content from the provided URL.
+
+The script utilizes the `requests` library to fetch the webpage content,
+`BeautifulSoup` to parse the HTML, and error handling mechanisms to catch potential exceptions
+during file operations and network requests.
+
+**Key functionalities:**
+
+- Prompts the user to choose between using an existing .html file(if available) or downloading a new one.
+- Handles user input for file selection or creation.
+- Downloads the webpage content using the `requests` library and saves it to a file.
+- Parses the downloaded HTML content using `BeautifulSoup`.
+- Extracts movie titles from HTML elements with the class "article_movie_title".
+- Prints the extracted movie titles.
+
+"""
+
 def scrapMyWeb(web_address):
     try:
         current_directory=os.getcwd()

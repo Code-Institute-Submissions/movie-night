@@ -28,58 +28,75 @@ during file operations and network requests.
 
 """
 
-def scrapMyWeb(web_address):
+import requests
+from bs4 import BeautifulSoup
+import os
 
+
+def get_file_path():
     """
-    Downloads the webpage content from the provided URL, saves it to an HTML file.
-    In case user runs the code twice, it prompts the user to either use the same html file,
-    or create a new one in order to make sure that the user has already run the file twice.  
+    Checks for existing HTML files, prompts user for choice or new filename,
+    and returns the file path.
+    """
 
+    base_path = "/workspace/movie-night"
+    html_files = []
+    for filename in os.listdir(base_path):
+        if filename.endswith(".html"):
+            html_files.append(filename)
+
+    if html_files:
+        view_existing_files = input(
+            "One or more existing (.html)files are found. Do you wish to see them ('y/n'): "
+        )
+        if view_existing_files.lower() != 'n':
+            print("Existing HTML files in the current directory are:\n")
+            for index, existing_file in enumerate(html_files):
+                print(f"{index+1}. {existing_file}")
+            user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): ")
+            if user_choice.lower() != 'n':
+                try:
+                    chosen_index = int(user_choice) - 1
+                    if 0 <= chosen_index < len(html_files):
+                        return os.path.join(base_path, html_files[chosen_index])
+                    else:
+                        print("Invalid choice. Please select a valid existing file number.")
+                        return get_file_path()
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+                    return get_file_path()
+            else:
+                save_location = input("Enter the desired filename: \n")
+                if not save_location.endswith(".html"):
+                    save_location += ".html"
+        else:
+            save_location = input("Enter the desired filename: \n")
+            if not save_location.endswith(".html"):
+                save_location += ".html"
+    else:
+        save_location = input("Enter the desired filename: \n")
+        if not save_location.endswith(".html"):
+            save_location += ".html"
+
+    return os.path.join(base_path, save_location)  # Return path for new file
+
+def scrapMyWeb(web_address):
+    """
+    Downloads the webpage content from the provided URL and saves it to an HTML file.
     """
 
     try:
-        base_path = "/workspace/movie-night"
-        html_files=[]
-        for filename in os.listdir(base_path):
-            if filename.endswith(".html"):
-                html_files.append(filename)
-        if html_files:
-            view_existing_files=input("One or more existing (.html)files are found. Do you wish to see them ('y/n'): ")
-            if view_existing_files.lower()!='n':
-                print("Existing HTML files in the current directory are:\n")
-                for index,existing_files in enumerate(html_files):
-                    print(f"{index+1}.{existing_files}")
-                user_choice=input("\nUse existing file (enter number) or create new (enter 'n'): ")
-                if user_choice.lower()!='n':
-                    file_path=os.path.join(base_path,html_files[int(user_choice)-1])
-                    extract_movie_titles(file_path)
-                    return
-                else:
-                    save_location=input("Enter the desired filename: \n")  
-                    if not save_location.endswith(".html"):
-                        save_location+=".html" 
-            else:
-                save_location=input("Enter the desired filename: \n")  
-                if not save_location.endswith(".html"):
-                    save_location+=".html"
-        else:
-                save_location=input("Enter the desired filename: \n")  
-                if not save_location.endswith(".html"):
-                    save_location+=".html"
-        
+        file_path = get_file_path()
         response = requests.get(web_address)
         response.raise_for_status()
-        with open(save_location, "w") as file:
+        with open(file_path, "w") as file:
             file.write(response.text)
-      
-        print(f"Downloaded webpage content saved to: {save_location}\n")
-        extract_movie_titles(save_location) 
-   
+        print(f"Downloaded webpage content saved to: {file_path}\n")
+        extract_movie_titles(file_path)
     except requests.exceptions.RequestException as shownerror:
-        print("Error downloading webpage:",shownerror)
+        print("Error downloading webpage:", shownerror)
     except (FileNotFoundError, IOError) as shownerror:
-        print("Error handling file:",shownerror)
-
+        print("Error handling file:", shownerror)
 
 
 def extract_movie_titles(file_path):

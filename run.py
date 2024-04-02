@@ -29,6 +29,37 @@ during file operations and network requests.
 
 """
 
+
+def scrapMyWeb(web_address):
+    """
+    Downloads the webpage content from the provided URL and saves it to an HTML file and extract movie title from the file using its path .
+    """
+    try:
+        file_path = get_file_path()
+        response = requests.get(web_address)
+        response.raise_for_status()
+        with open(file_path, "w") as file:
+            file.write(response.text)
+        print(f"Downloaded webpage content is in: {file_path}\n")
+        extract_movie_titles(file_path)
+    except requests.exceptions.RequestException as e:
+        print("Error downloading webpage:",e)
+    except (FileNotFoundError, IOError) as e:
+        print("Error handling related file:", e)
+
+
+
+def get_new_file_name():
+    """
+    Prompts the user for a new filename and ensures it has the .html extension.
+    """
+    save_location = input("Enter the desired filename: \n")
+    if not save_location.endswith(".html"):
+        save_location += ".html"
+    return save_location
+
+
+
 def get_file_path():
     """
     Checks for existing HTML files, prompts user for choice or new filename,
@@ -44,7 +75,7 @@ def get_file_path():
         print("PLEASE BE RESPECTFUL,DO NOT SCRAP AGAIN IF A SAVED FILE ALREADY EXIST!\n")
         time.sleep(1)
         print("Loading....")
-        time.sleep(3)
+        time.sleep(2)
         view_existing_files = input("One or more existing (.html)files are found. Do you wish to see them ('y/n'): \n ")
         if view_existing_files.lower() != 'n':
             print("Existing HTML files in the current directory are:\n")
@@ -63,46 +94,21 @@ def get_file_path():
                     print("Invalid input. Please enter a number.")
                     return get_file_path()
             else:
-                save_location = input("Enter the desired filename: \n")
-                if not save_location.endswith(".html"):
-                    save_location += ".html"
+                get_new_file_name()
         else:
-            save_location = input("Enter the desired filename: \n")
-            if not save_location.endswith(".html"):
-                save_location += ".html"
+            get_new_file_name()
     else:
-        save_location = input("Enter the desired filename: \n")
-        if not save_location.endswith(".html"):
-            save_location += ".html"
+        get_new_file_name()
 
     return os.path.join(base_path, save_location)  # Return path for new file
 
-def scrapMyWeb(web_address):
-    """
-    Downloads the webpage content from the provided URL and saves it to an HTML file.
-    """
-
-    try:
-        file_path = get_file_path()
-        response = requests.get(web_address)
-        response.raise_for_status()
-        with open(file_path, "w") as file:
-            file.write(response.text)
-        print(f"Downloaded webpage content is in: {file_path}\n")
-        extract_movie_titles(file_path)
-    except requests.exceptions.RequestException as shownerror:
-        print("Error downloading webpage:", shownerror)
-    except (FileNotFoundError, IOError) as shownerror:
-        print("Error handling related file:", shownerror)
 
 
 def extract_movie_titles(file_path):
-
     """
     Use BeautifulSoup to read and return the movie titles from the saved HTML file.
     """
-
-    print("\nThe Top Best Movies of 2023 Are:\n")
+    print("\nThe Top 50 Best Movies of 2023 Are:\n")
     try:
         with open(file_path,"r") as file:
             html_doc=file.read()
@@ -120,6 +126,9 @@ def extract_movie_titles(file_path):
         print("Error:",e)
 
 
-
 web_address = "https://editorial.rottentomatoes.com/guide/best-movies-of-2023/"
 scrapMyWeb(web_address)
+
+
+
+

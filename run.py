@@ -26,27 +26,12 @@ during file operations and network requests.
 - Parses the downloaded HTML content using `BeautifulSoup`.
 - Extracts movie titles from HTML elements with the class "article_movie_title".
 - Prints the extracted movie titles.
-
 """
 
 
-def scrapMyWeb(web_address):
-    """
-    Downloads the webpage content from the provided URL and saves it to an HTML file and extract movie title from the file using its path .
-    """
-    try:
-        file_path = get_file_path()
-        response = requests.get(web_address)
-        response.raise_for_status()
-        with open(file_path, "w") as file:
-            file.write(response.text)
-        print(f"Downloaded webpage content is in: {file_path}\n")
-        extract_movie_titles(file_path)
-    except requests.exceptions.RequestException as e:
-        print("Error downloading webpage:",e)
-    except (FileNotFoundError, IOError) as e:
-        print("Error handling related file:", e)
-
+"""
+HELPER FUNCTIONS [get_new_file_name() and get_file_path()]
+"""
 
 def get_new_file_name():
     """
@@ -104,6 +89,27 @@ def get_file_path():
     return os.path.join(base_path, save_location)  # Return path for new file
 
 
+"""
+CORE FUNCTIONS [scrapMyWeb() and extract_movie_titles()]
+"""
+
+def scrapMyWeb(web_address):
+    """
+    Downloads the webpage content from the provided URL and saves it to an HTML file and extract movie title from the file using its path .
+    """
+    try:
+        file_path = get_file_path()
+        response = requests.get(web_address)
+        response.raise_for_status()
+        with open(file_path, "w") as file:
+            file.write(response.text)
+        print(f"Downloaded webpage content is in: {file_path}\n")
+        extract_movie_titles(file_path)
+    except requests.exceptions.RequestException as e:
+        print("Error downloading webpage:",e)
+    except (FileNotFoundError, IOError) as e:
+        print("Error handling related file:", e)
+
 
 def extract_movie_titles(file_path):
     """
@@ -127,8 +133,23 @@ def extract_movie_titles(file_path):
         print("Error:",e)
 
 
-web_address = "https://editorial.rottentomatoes.com/guide/best-movies-of-2023/"
-scrapMyWeb(web_address)
+"""
+ENTRY FUNCTION [main()]
+"""
+
+def main():
+    web_address = "https://editorial.rottentomatoes.com/guide/best-movies-of-2023/"
+
+    # Get user input before starting the program
+    user_input = input("Press Enter to begin the program or 'exit' to quit: \n ")
+    if user_input.lower() == 'exit':
+        exit()
+    scrapMyWeb(web_address)
+   
+if __name__ == "__main__":
+    main()
+
+
 
 
 

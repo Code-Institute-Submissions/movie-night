@@ -10,9 +10,16 @@ This Python script scrapes movie titles from a webpage "Best Movies of the Year 
 and filters the list to give the 50 best movies out of a list of more then 150 
 and saves the downloaded HTML content. 
 
+The code uses some of the already exisitng and highly common coding lines such as:
+1. requests.get(web_address) ----> This uses the highly common requests library and its get() method.
+2. BeautifulSoup(html_doc,"html.parser") ----> Another highly common class called 'Beautiful soup'.
+3. with open() ----> Uses commonly used with and open function for automatic closing of file and uses 'mode' argument
+   of the function to either read or write the named file. 
+
 It offers the user choices to:
 1. Use an existing .html file containing the desired webpage content (for in case,if user ran the script twice).
 2. Create a new .html file by downloading the webpage content from the provided URL.
+3. Exit anytime after getting prompt for creating a new file.
 
 The script utilizes the `requests` library to fetch the webpage content,
 `BeautifulSoup` to parse the HTML, and error handling mechanisms to catch potential exceptions

@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+import time
 
 
 """
@@ -33,7 +34,6 @@ def get_file_path():
     Checks for existing HTML files, prompts user for choice or new filename,
     and returns the file path.
     """
-
     base_path = "/workspace/movie-night"
     html_files = []
     for filename in os.listdir(base_path):
@@ -41,14 +41,16 @@ def get_file_path():
             html_files.append(filename)
 
     if html_files:
-        view_existing_files = input(
-            "One or more existing (.html)files are found. Do you wish to see them ('y/n'): "
-        )
+        print("PLEASE BE RESPECTFUL,DO NOT SCRAP AGAIN IF A SAVED FILE ALREADY EXIST!\n")
+        time.sleep(1)
+        print("Loading....")
+        time.sleep(3)
+        view_existing_files = input("One or more existing (.html)files are found. Do you wish to see them ('y/n'): \n ")
         if view_existing_files.lower() != 'n':
             print("Existing HTML files in the current directory are:\n")
             for index, existing_file in enumerate(html_files):
                 print(f"{index+1}. {existing_file}")
-            user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): ")
+            user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): \n ")
             if user_choice.lower() != 'n':
                 try:
                     chosen_index = int(user_choice) - 1
@@ -86,12 +88,12 @@ def scrapMyWeb(web_address):
         response.raise_for_status()
         with open(file_path, "w") as file:
             file.write(response.text)
-        print(f"Downloaded webpage content saved to: {file_path}\n")
+        print(f"Downloaded webpage content is in: {file_path}\n")
         extract_movie_titles(file_path)
     except requests.exceptions.RequestException as shownerror:
         print("Error downloading webpage:", shownerror)
     except (FileNotFoundError, IOError) as shownerror:
-        print("Error handling file:", shownerror)
+        print("Error handling related file:", shownerror)
 
 
 def extract_movie_titles(file_path):

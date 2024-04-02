@@ -30,12 +30,14 @@ during file operations and network requests.
 
 
 """
-HELPER FUNCTIONS [get_new_file_name() and get_file_path()]
+HELPER FUNCTIONS : [get_new_file_name() and get_file_path()]
 """
-
 def get_new_file_name():
     """
-    Prompts the user for a new filename and ensures it has the .html extension.
+    Prompts the user for a new filename or exiting the program 
+    and if the user wish to continue, it ensures
+    the file name given by user has the .html extension,if not
+    it adds the .html extension.
     """
     while True:
         save_location = input("Enter the desired filename or exit the program (type 'exit'): \n")
@@ -48,8 +50,10 @@ def get_new_file_name():
 
 def get_file_path():
     """
-    Checks for existing HTML files, prompts user for choice or new filename,
-    and returns the file path.
+    Saves the exisiting html files into an empty list. 
+    Runs when there are, html files present in the program directory which is the gitpod's workspace path. 
+    if html files are already available, it gives user possibility to perform operations on them, 
+    such as using the existing file by giving a number related to the movie or creating a new one.
     """
     base_path = "/workspace/movie-night"
     html_files = []
@@ -70,7 +74,7 @@ def get_file_path():
             user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): \n ")
             if user_choice.lower() != 'n':
                 try:
-                    chosen_index = int(user_choice) - 1
+                    chosen_index = int(user_choice) - 1   #since user_choice is index+1, so -1 gives the right indexing
                     if 0 <= chosen_index < len(html_files):
                         return os.path.join(base_path, html_files[chosen_index])
                     else:
@@ -90,12 +94,12 @@ def get_file_path():
 
 
 """
-CORE FUNCTIONS [scrapMyWeb() and extract_movie_titles()]
+CORE FUNCTIONS : [scrapMyWeb() and extract_movie_titles()]
 """
-
 def scrapMyWeb(web_address):
     """
-    Downloads the webpage content from the provided URL and saves it to an HTML file and extract movie title from the file using its path .
+    Use the file path and the file (either newly created or exisiting),
+    to write the content of the webpage in it.
     """
     try:
         file_path = get_file_path()
@@ -114,8 +118,9 @@ def scrapMyWeb(web_address):
 def extract_movie_titles(file_path):
     """
     Use BeautifulSoup to read and return the movie titles from the saved HTML file.
+    Used inside the scrapmyweb function to return the title names from the saved file. 
     """
-    print("\nThe Top 50 Best Movies of 2023 Are:\n")
+    print("\n The Top 50 Best Movies of 2023 Are: \n ")
     try:
         with open(file_path,"r") as file:
             html_doc=file.read()
@@ -134,13 +139,17 @@ def extract_movie_titles(file_path):
 
 
 """
-ENTRY FUNCTION [main()]
+ENTRY FUNCTION : [main()]
 """
-
 def main():
+
+    """
+    This function serves as the program's main entry point by 
+    prompting the user for either to run or exit the program.
+    It uses the scrapmyweb() function as its main logic. 
+    """
     web_address = "https://editorial.rottentomatoes.com/guide/best-movies-of-2023/"
 
-    # Get user input before starting the program
     user_input = input("Press Enter to begin the program or 'exit' to quit: \n ")
     if user_input.lower() == 'exit':
         exit()

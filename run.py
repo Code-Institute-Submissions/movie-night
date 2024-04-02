@@ -5,38 +5,6 @@ import time
 
 
 """
-
-This Python script scrapes movie titles from a webpage "Best Movies of the Year 2023" webpage
-and filters the list to give the 50 best movies out of a list of more then 150 
-and saves the downloaded HTML content. 
-
-The code uses some of the already exisitng and highly common coding lines such as:
-1. requests.get(web_address) ----> This uses the highly common requests library and its get() method.
-2. BeautifulSoup(html_doc,"html.parser") ----> Another highly common class called 'Beautiful soup'.
-3. with open() ----> Uses commonly used with and open function for automatic closing of file and uses 'mode' argument
-   of the function to either read or write the named file. 
-
-It offers the user choices to:
-1. Use an existing .html file containing the desired webpage content (for in case,if user ran the script twice).
-2. Create a new .html file by downloading the webpage content from the provided URL.
-3. Exit anytime after getting prompt for creating a new file.
-
-The script utilizes the `requests` library to fetch the webpage content,
-`BeautifulSoup` to parse the HTML, and error handling mechanisms to catch potential exceptions
-during file operations and network requests.
-
-**Key functionalities:**
-
-- Prompts the user to choose between using an existing .html file(if available) or downloading a new one.
-- Handles user input for file selection or creation.
-- Downloads the webpage content using the `requests` library and saves it to a file.
-- Parses the downloaded HTML content using `BeautifulSoup`.
-- Extracts movie titles from HTML elements with the class "article_movie_title".
-- Prints the extracted movie titles.
-"""
-
-
-"""
 HELPER FUNCTIONS : [get_new_file_name() and get_file_path()]
 """
 def get_new_file_name():
@@ -54,13 +22,15 @@ def get_new_file_name():
             save_location += ".html"
         return save_location
 
-
 def get_file_path():
     """
     Saves the exisiting html files into an empty list. 
-    Runs when there are, html files present in the program directory which is the gitpod's workspace path. 
-    if html files are already available, it gives user possibility to perform operations on them, 
-    such as using the existing file by giving a number related to the movie or creating a new one.
+    Runs when there are html files present in the program
+    directory which is the gitpod's workspace path. 
+    if html files are already available, it gives user 
+    possibility to perform operations on them, 
+    such as using the existing file by giving a number 
+    related to the movie or creating a new one.
     """
     base_path = "/workspace/movie-night"
     html_files = []
@@ -121,11 +91,12 @@ def scrapMyWeb(web_address):
     except (FileNotFoundError, IOError) as e:
         print("Error handling related file:", e)
 
-
 def extract_movie_titles(file_path):
     """
-    Use BeautifulSoup to read and return the movie titles from the saved HTML file.
-    Used inside the scrapmyweb function to return the title names from the saved file. 
+    Use BeautifulSoup to read and return the movie 
+    titles from the saved HTML file. Used inside the 
+    scrapmyweb function to return the title names from
+    the saved file. 
     """
     print("\n The Top 50 Best Movies of 2023 Are: \n ")
     try:

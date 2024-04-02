@@ -1,31 +1,76 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+MOVIE NIGHT
 
-Welcome prakash joshi,
+This Python script helps you retrieve and display the top 50 best movies of 2023.
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
+## How to use the program
 
-## Reminders
+1. The program will prompt you to either press Enter to begin or type "exit" to quit.
 
-* Your code must be placed in the `run.py` file
-* Your dependencies must be placed in the `requirements.txt` file
-* Do not edit any of the other files or your code may not deploy properly
+2. If you choose to continue, it will then:
 
-## Creating the Heroku app
+    a. Check if a previously downloaded HTML file exists.
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+    b. If a file exists, it will ask you if you want to use it or create a new one.
 
-1. `heroku/python`
-2. `heroku/nodejs`
+    c. If no file exists, or you choose to create a new one, it will download the webpage content and save it as a new HTML file.
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+Finally, it will parse the saved HTML file and display the top 50 movie titles
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+## Features
 
-Connect your GitHub repository and deploy as normal.
+This script offers the following functionalities:
 
-## Constraints
+1. User-friendly prompts for starting the program and choosing file options.
+2. Ability to reuse previously downloaded webpage content (if available).
+3. Downloading the webpage content from a specified URL if no saved file exists.
+4. Parsing the downloaded HTML using BeautifulSoup to extract movie titles.
+5. Displaying the top 50 extracted movie titles.
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+### Future features
 
------
-Happy coding!
+1. Implement error handlings for situations when target website is changed.
+2. Ability to save the extracted movie title to a file.
+
+## Data Model
+
+The script doesn't use a complex data model. It relies on:
+
+1. User input to choose between existing and new files.
+2. Downloaded or existing HTML file to store the webpage content.
+3. In-memory data structures (lists) to temporarily hold extracted movie titles.
+
+## Testing
+
+1. The code has been tested locally on my machine where local directory was used. Instead of giving an static location, i have used 
+   command .getcwd to get the working directory.
+2. The code is also tested on GitPod where i have replaced the .getcwd command by a static location of the workspace.
+
+## Bugs
+
+1. No known critical bugs have been identified. However, as with any web scraping script, there's a chance the script might break if the target webpage structure changes significantly.
+
+2. To prevant this, there is already a saved .html file in the same directory which will enable the user to still get the movie title names.
+
+## Deployment
+
+This project was deployed using Code Institute's mock terminal for Heroku.
+
+Steps for deployment:
+1. Fork or clone this repository.
+2. create a new Heroku app.
+3. Set the buildblocks to python and NodeJS in that order.
+4. click on deploy.
+
+## Credits
+
+1. This script utilizes the following external libraries:
+    a. requests: Used for downloading webpage content.
+    b. BeautifulSoup: Used for parsing HTML content.
+2. Code Institute for the deployment environment. 
+3. Google to search for knowing the common commands that enable web scraping. 
+4. The code uses some of the already exisitng and highly common code snippet used for web scraping such as:
+    1. requests.get(web_address) ----> This uses the highly common requests library and its get() method.
+    2. BeautifulSoup(html_doc,"html.parser") ----> Another highly common class called 'Beautiful soup'.
+    3. with open() ----> Uses commonly used with and open function for automatic closing of file and uses 'mode' argument
+                        of the function to either read or write the named file. 
+

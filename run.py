@@ -48,16 +48,17 @@ def scrapMyWeb(web_address):
         print("Error handling related file:", e)
 
 
-
 def get_new_file_name():
     """
     Prompts the user for a new filename and ensures it has the .html extension.
     """
-    save_location = input("Enter the desired filename: \n")
-    if not save_location.endswith(".html"):
-        save_location += ".html"
-    return save_location
-
+    while True:
+        save_location = input("Enter the desired filename or exit the program (type 'exit'): \n")
+        if save_location.lower()=='exit':
+            exit()
+        elif not save_location.endswith(".html"):
+            save_location += ".html"
+        return save_location
 
 
 def get_file_path():

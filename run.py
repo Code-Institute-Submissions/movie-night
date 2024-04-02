@@ -28,11 +28,6 @@ during file operations and network requests.
 
 """
 
-import requests
-from bs4 import BeautifulSoup
-import os
-
-
 def get_file_path():
     """
     Checks for existing HTML files, prompts user for choice or new filename,

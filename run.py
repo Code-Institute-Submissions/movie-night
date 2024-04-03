@@ -71,14 +71,15 @@ def reuse_or_create_html_file():
                         print("Invalid input. Please enter a number or 'n'.")
                         return reuse_or_create_html_file()
                 else:
-                    get_new_file_name()
+                    save_location = get_new_file_name()
+                    return os.path.join(base_path, save_location)
             else:
-                get_new_file_name()
+                save_location = get_new_file_name()
+                return os.path.join(base_path, save_location)
         else:
-            get_new_file_name()
-    # Return path for new file
-        return os.path.join(base_path, save_location)
-
+            save_location = get_new_file_name()
+            return os.path.join(base_path, save_location)
+          
 
 """
 CORE FUNCTIONS : [scrapMyWeb() and extract_movie_titles()]

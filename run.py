@@ -22,7 +22,7 @@ def get_new_file_name():
             save_location += ".html"
         return save_location
 
-def get_file_path():
+def reuse_or_create_html_file():
     """
     Saves the exisiting html files into an empty list. 
     Runs when there are html files present in the program
@@ -56,15 +56,15 @@ def get_file_path():
             user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): \n ")
             if user_choice.lower() != 'n':
                 try:
-                    chosen_index = int(user_choice) - 1   #since user_choice is index+1, so -1 gives the right indexing
+                    chosen_index = int(user_choice) - 1   #since user_choice is index+1,doing -1 give back the right indexing
                     if 0 <= chosen_index < len(html_files):
                         return os.path.join(base_path, html_files[chosen_index])
                     else:
                         print("Invalid choice. Please select a valid existing file number.")
-                        return get_file_path()
+                        return reuse_or_create_html_file()
                 except ValueError:
                     print("Invalid input. Please enter a number or 'n'.")
-                    return get_file_path()
+                    return reuse_or_create_html_file()
             else:
                 get_new_file_name()
         else:
@@ -84,7 +84,7 @@ def scrapMyWeb(web_address):
     to write the content of the webpage in it.
     """
     try:
-        file_path = get_file_path()
+        file_path = reuse_or_create_html_file()
         response = requests.get(web_address)
         response.raise_for_status()
         with open(file_path, "w") as file:

@@ -43,7 +43,12 @@ def get_file_path():
         time.sleep(1)
         print("Loading....")
         time.sleep(2)
-        view_existing_files = input("One or more existing (.html)files are found. Do you wish to see them ('y/n'): \n ")
+        while True:
+            view_existing_files = input("One or more existing (.html) files are found. Do you wish to see them ('y/n'): \n ")
+            if view_existing_files.lower() in ('y','n'): 
+                break # Valid input received 
+            else:
+                print("Invalid input. Please enter 'y' or 'n'.")
         if view_existing_files.lower() != 'n':
             print("Existing HTML files in the current directory are:\n")
             for index, existing_file in enumerate(html_files):
@@ -58,7 +63,7 @@ def get_file_path():
                         print("Invalid choice. Please select a valid existing file number.")
                         return get_file_path()
                 except ValueError:
-                    print("Invalid input. Please enter a number.")
+                    print("Invalid input. Please enter a number or 'n'.")
                     return get_file_path()
             else:
                 get_new_file_name()
@@ -135,6 +140,7 @@ def main():
    
 if __name__ == "__main__":
     main()
+
 
 
 

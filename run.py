@@ -1,6 +1,7 @@
 import requests
 import os
 import time
+import tempfile
 from bs4 import BeautifulSoup
 
 
@@ -35,47 +36,48 @@ def reuse_or_create_html_file():
     existing file by giving a number related to the movie or
     creating a new one.
     """
-    base_path = "/workspace/movie-night"
-    html_files = []
-    for filename in os.listdir(base_path):
-        if filename.endswith(".html"):
-            html_files.append(filename)
+    with tempfile.TemporaryDirectory() as temporary_heroku_dir:
+        base_path = temporary_heroku_dir
+        html_files = []
+        for filename in os.listdir(base_path):
+            if filename.endswith(".html"):
+                html_files.append(filename)
 
-    if html_files:
-        print("PLEASE BE RESPECTFUL, DO NOT SCRAP AGAIN IF A SAVED FILE ALREADY EXISTS!\n")
-        time.sleep(1)
-        print("Loading....")
-        time.sleep(2)
-        while True:
-            view_existing_files = input("One or more existing (.html) files are found. Do you wish to see them ('y/n'): \n ")
-            if view_existing_files.lower() in ('y', 'n'):
-                break  # Valid input received
-            else:
-                print("Invalid input. Please enter 'y' or 'n'.")
-        if view_existing_files.lower() != 'n':
-            print("Existing HTML files in the current directory are:\n")
-            for index, existing_file in enumerate(html_files):
-                print(f"{index+1}. {existing_file}")
-            user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): \n ")
-            if user_choice.lower() != 'n':
-                try:
-                    chosen_index = int(user_choice) - 1
-                    if 0 <= chosen_index < len(html_files):
-                        return os.path.join(base_path, html_files[chosen_index])
-                    else:
-                        print("Invalid choice. Please select a valid existing file number.")
+        if html_files:
+            print("PLEASE BE RESPECTFUL, DO NOT SCRAP AGAIN IF A SAVED FILE ALREADY EXISTS!\n")
+            time.sleep(1)
+            print("Loading....")
+            time.sleep(2)
+            while True:
+                view_existing_files = input("One or more existing (.html) files are found. Do you wish to see them ('y/n'): \n ")
+                if view_existing_files.lower() in ('y', 'n'):
+                    break  # Valid input received
+                else:
+                    print("Invalid input. Please enter 'y' or 'n'.")
+            if view_existing_files.lower() != 'n':
+                print("Existing HTML files in the current directory are:\n")
+                for index, existing_file in enumerate(html_files):
+                    print(f"{index+1}. {existing_file}")
+                user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): \n ")
+                if user_choice.lower() != 'n':
+                    try:
+                        chosen_index = int(user_choice) - 1
+                        if 0 <= chosen_index < len(html_files):
+                            return os.path.join(base_path, html_files[chosen_index])
+                        else:
+                            print("Invalid choice. Please select a valid existing file number.")
+                            return reuse_or_create_html_file()
+                    except ValueError:
+                        print("Invalid input. Please enter a number or 'n'.")
                         return reuse_or_create_html_file()
-                except ValueError:
-                    print("Invalid input. Please enter a number or 'n'.")
-                    return reuse_or_create_html_file()
+                else:
+                    get_new_file_name()
             else:
                 get_new_file_name()
         else:
             get_new_file_name()
-    else:
-        get_new_file_name()
-# Return path for new file
-    return os.path.join(base_path, save_location)
+    # Return path for new file
+        return os.path.join(base_path, save_location)
 
 
 """

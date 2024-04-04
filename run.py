@@ -105,13 +105,14 @@ def scrapMyWeb(web_address, client):
         response = requests.get(web_address)
         response.raise_for_status()
         #Upload to google cloud storage
-        my_google_bucket = "webfiles-movie_night"
+        webfiles = "webfiles-movie_night"  
+        my_google_bucket = webfiles 
         bucket = client.bucket(webfiles-movie_night)
         html_file = bucket.blob(file_path)
         html_file.upload_from_string(response.text)
 
         print(f"Downloaded webpage content uploaded to: gs://{my_google_bucket}/{file_path}\n")
-        extract_movie_titles(bucket, file_path)
+        extract_movie_titles(file_path, client)
     except requests.exceptions.RequestException as e:
         print("Error downloading webpage:", e)
     except Exception as e:

@@ -6,10 +6,8 @@ import json
 from google.oauth2 import service_account 
 from bs4 import BeautifulSoup
 from google.cloud import storage 
-import logging
 
 
-logging.basicConfig(level=logging.DEBUG)
 credentials_json = os.environ.get("CREDS")
 credentials_data = json.loads(credentials_json)
 creds = service_account.Credentials.from_service_account_info(credentials_data)

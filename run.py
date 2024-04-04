@@ -3,13 +3,15 @@ import os
 import time
 import tempfile
 from bs4 import BeautifulSoup
-import google.auth
+from google.auth import load_credentials_from_file
 from google.cloud import storage 
 
 
 # Load the credentials from an environment variable
-credentials, project_id = google.auth.default()
+credentials_path = os.path.join(os.getcwd(), "creds.json")  
+credentials = load_credentials_from_file(credentials_path)
 client = storage.Client(credentials=credentials) 
+
 
 """
 HELPER FUNCTIONS: [get_new_file_name() and get_file_path()]

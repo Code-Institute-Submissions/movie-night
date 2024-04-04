@@ -111,14 +111,14 @@ def scrapMyWeb(web_address, client):
         html_file.upload_from_string(response.text)
 
         print(f"Downloaded webpage content uploaded to: gs://{my_google_bucket}/{file_path}\n")
-        extract_movie_titles(file_path, client)
+        extract_movie_titles(file_path, client, bucket)
     except requests.exceptions.RequestException as e:
         print("Error downloading webpage:", e)
     except Exception as e:
         print("Error handling related file:", e)
 
 
-def extract_movie_titles(file_path, client):
+def extract_movie_titles(file_path, client, bucket):
     """
     Use BeautifulSoup to read and return the movie
     titles from the saved HTML file. Used inside the

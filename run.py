@@ -1,11 +1,10 @@
-import requests
 import os
 import time
-import tempfile
 import json
+import requests
 from google.oauth2 import service_account 
-from bs4 import BeautifulSoup
 from google.cloud import storage 
+from bs4 import BeautifulSoup
 
 
 # Global Constant for Bucket Name

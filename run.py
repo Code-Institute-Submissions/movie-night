@@ -3,22 +3,17 @@ import os
 import time
 import tempfile
 import json
-import google.auth
+from google.auth import credentials
 from bs4 import BeautifulSoup
 from google.cloud import storage 
 import logging
 
 
-
 logging.basicConfig(level=logging.DEBUG)
 credentials_json = os.environ.get("CREDS")
-credentials = json.loads(credentials_json)
-logging.debug(f"credentials_json: {credentials_json}")
- 
-credentials, project_id = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
-
-client = storage.Client(credentials=credentials)
-
+credentials_data = json.loads(credentials_json)
+creds = credentials.Credentials.from_service_account_info(credentials_data)
+client = storage.Client(credentials=creds, project=project_id)
 
 
 """

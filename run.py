@@ -7,6 +7,10 @@ import google.auth
 from google.cloud import storage 
 
 
+# Load the credentials from an environment variable
+credentials, project_id = google.auth.default()
+client = storage.Client(credentials=credentials) 
+
 """
 HELPER FUNCTIONS: [get_new_file_name() and get_file_path()]
 """
@@ -38,49 +42,45 @@ def reuse_or_create_html_file():
     existing file by giving a number related to the movie or
     creating a new one.
     """
-    with tempfile.TemporaryDirectory() as temporary_heroku_dir:
-        base_path = temporary_heroku_dir
-        html_files = []
-        for filename in os.listdir(base_path):
-            if filename.endswith(".html"):
-                html_files.append(filename)
-
-        if html_files:
-            print("PLEASE BE RESPECTFUL, DO NOT SCRAP AGAIN IF A SAVED FILE ALREADY EXISTS!\n")
-            time.sleep(1)
-            print("Loading....")
-            time.sleep(2)
+    my_google_bucket = "webfiles-movie_night"
+    bucket = client.bucket(webfiles-movie_night)
+    existing_files = list(bucket.list_blobs(prefix=""))
+    html_files = [blob.name for blob in existing_files if blob.name.endswith(".html")]
+    if html_files:
+        print("PLEASE BE RESPECTFUL, DO NOT SCRAP AGAIN IF A SAVED FILE ALREADY EXISTS!\n")
+        time.sleep(1)
+        print("Loading....")
+        time.sleep(2)
+        while True:
+            view_existing_files = input("One or more existing (.html) files are found. Do you wish to see them ('y/n'): \n ")
+            if view_existing_files.lower() in ('y', 'n'):
+                break  # Valid input received
+            else:
+                print("Invalid input. Please enter 'y' or 'n'.")
+        if view_existing_files.lower() == 'y':
+            print("Existing HTML files in the current directory are:\n")
+            for index, existing_file in enumerate(html_files):
+                print(f"{index+1}. {existing_file}")
             while True:
-                view_existing_files = input("One or more existing (.html) files are found. Do you wish to see them ('y/n'): \n ")
-                if view_existing_files.lower() in ('y', 'n'):
-                    break  # Valid input received
-                else:
-                    print("Invalid input. Please enter 'y' or 'n'.")
-            if view_existing_files.lower() != 'n':
-                print("Existing HTML files in the current directory are:\n")
-                for index, existing_file in enumerate(html_files):
-                    print(f"{index+1}. {existing_file}")
                 user_choice = input("\nUse existing file (enter number) or create new (enter 'n'): \n ")
                 if user_choice.lower() != 'n':
                     try:
                         chosen_index = int(user_choice) - 1
                         if 0 <= chosen_index < len(html_files):
-                            return os.path.join(base_path, html_files[chosen_index])
+                            return html_files[chosen_index]
                         else:
                             print("Invalid choice. Please select a valid existing file number.")
-                            return reuse_or_create_html_file()
                     except ValueError:
                         print("Invalid input. Please enter a number or 'n'.")
-                        return reuse_or_create_html_file()
                 else:
-                    save_location = get_new_file_name()
-                    return os.path.join(base_path, save_location)
-            else:
-                save_location = get_new_file_name()
-                return os.path.join(base_path, save_location)
+                    break
         else:
-            save_location = get_new_file_name()
-            return os.path.join(base_path, save_location)
+            print("Skipping viewing existing files.") 
+            return get_new_file_name()
+    else:
+        return get_new_file_name()
+
+
    
 
 """
@@ -97,13 +97,17 @@ def scrapMyWeb(web_address):
         file_path = reuse_or_create_html_file()
         response = requests.get(web_address)
         response.raise_for_status()
-        with open(file_path, "w") as file:
-            file.write(response.text)
-        print(f"Downloaded webpage content is in: {file_path}\n")
-        extract_movie_titles(file_path)
+        #Upload to google cloud storage
+        my_google_bucket = "webfiles-movie_night"
+        bucket = client.bucket(webfiles-movie_night)
+        html_file = bucket.blob(file_path)
+        html_file.upload_from_string(response.text)
+
+        print(f"Downloaded webpage content uploaded to: gs://{bmy_google_bucket}/{file_path}\n")
+        extract_movie_titles(bucket, file_path)
     except requests.exceptions.RequestException as e:
         print("Error downloading webpage:", e)
-    except (FileNotFoundError, IOError) as e:
+    except Exception as e:
         print("Error handling related file:", e)
 
 
@@ -116,8 +120,8 @@ def extract_movie_titles(file_path):
     """
     print("\n The Top 50 Best Movies of 2023 Are: \n ")
     try:
-        with open(file_path, "r") as file:
-            html_doc = file.read()
+        html_file = bucket.blob(file_path)
+        html_doc = html_file.download_as_string().decode('utf-8')
         soup = BeautifulSoup(html_doc, "html.parser")
         movies = soup.find_all('div', class_="article_movie_title")
         title_count = 0

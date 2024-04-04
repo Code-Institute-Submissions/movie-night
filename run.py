@@ -8,8 +8,9 @@ from google.cloud import storage
 
 
 # Load the credentials from an environment variable
-credentials_path = os.path.join(os.getcwd(), "creds.json")  
-credentials = load_credentials_from_file(credentials_path)
+print("Environment Variable:", os.environ.get("CREDS"))  
+
+credentials = load_credentials_from_file(os.environ.get("CREDS")) 
 client = storage.Client(credentials=credentials) 
 
 

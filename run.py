@@ -8,6 +8,10 @@ from bs4 import BeautifulSoup
 from google.cloud import storage 
 
 
+# Global Constant for Bucket Name
+WEBFILES = "webfiles-movie_night" 
+
+
 credentials_json = os.environ.get("CREDS")
 credentials_data = json.loads(credentials_json)
 creds = service_account.Credentials.from_service_account_info(credentials_data)
@@ -36,7 +40,6 @@ def get_new_file_name():
             save_location += ".html"
         return save_location
 
-webfiles = "webfiles-movie_night" 
 
 def reuse_or_create_html_file():
     """
@@ -48,7 +51,7 @@ def reuse_or_create_html_file():
     existing file by giving a number related to the movie or
     creating a new one.
     """
-    my_google_bucket = webfiles
+    my_google_bucket = WEBFILES
     bucket = client.bucket(my_google_bucket)
     existing_files = list(bucket.list_blobs(prefix=""))
     html_files = [blob.name for blob in existing_files if blob.name.endswith(".html")]
@@ -86,9 +89,7 @@ def reuse_or_create_html_file():
     else:
         return get_new_file_name()
 
-
    
-
 """
 CORE FUNCTIONS : [scrapMyWeb() and extract_movie_titles()]
 """
@@ -98,14 +99,13 @@ def scrapMyWeb(web_address, client):
     """
     Use the file path and the file (either newly created or exisiting),
     to write the content of the webpage in it.
-    """
-    webfiles = "webfiles-movie_night" 
+    """ 
     try:
         file_path = reuse_or_create_html_file()
         response = requests.get(web_address)
         response.raise_for_status()
         #Upload to google cloud storage 
-        my_google_bucket = webfiles 
+        my_google_bucket = WEBFILES 
         bucket = client.bucket(my_google_bucket)
         html_file = bucket.blob(file_path)
         html_file.upload_from_string(response.text)

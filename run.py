@@ -6,16 +6,13 @@ import json
 import google.auth
 from bs4 import BeautifulSoup
 from google.cloud import storage 
-import logging
 
 
 
-
-logging.basicConfig(level=logging.DEBUG)  
 credentials_json = os.environ.get("CREDS")
-credentials = json.loads(credentials_json) 
-logging.debug(f"credentials_json: {credentials_json}") 
-
+credentials = json.loads(credentials_json)
+credentials, project_id = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
+client = storage.Client(credentials=credentials)
 
 
 
@@ -96,7 +93,7 @@ CORE FUNCTIONS : [scrapMyWeb() and extract_movie_titles()]
 """
 
 
-def scrapMyWeb(web_address):
+def scrapMyWeb(web_address, client):
     """
     Use the file path and the file (either newly created or exisiting),
     to write the content of the webpage in it.
@@ -119,7 +116,7 @@ def scrapMyWeb(web_address):
         print("Error handling related file:", e)
 
 
-def extract_movie_titles(file_path):
+def extract_movie_titles(file_path, client):
     """
     Use BeautifulSoup to read and return the movie
     titles from the saved HTML file. Used inside the
@@ -160,7 +157,7 @@ def main():
     user_input = input("Press Enter to begin the program or 'exit' to quit: \n ")
     if user_input.lower() == 'exit':
         exit()
-    scrapMyWeb(web_address)
+    scrapMyWeb(web_address, client)
 
 
 if __name__ == "__main__":

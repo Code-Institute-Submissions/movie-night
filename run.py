@@ -3,6 +3,8 @@ import os
 import time
 import tempfile
 from bs4 import BeautifulSoup
+import google.auth
+from google.cloud import storage 
 
 
 """
@@ -79,7 +81,7 @@ def reuse_or_create_html_file():
         else:
             save_location = get_new_file_name()
             return os.path.join(base_path, save_location)
-          
+   
 
 """
 CORE FUNCTIONS : [scrapMyWeb() and extract_movie_titles()]

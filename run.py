@@ -2,13 +2,13 @@ import os
 import time
 import json
 import requests
-from google.oauth2 import service_account 
-from google.cloud import storage 
+from google.oauth2 import service_account
+from google.cloud import storage
 from bs4 import BeautifulSoup
 
 
-# Global Constant for Bucket Name
-WEBFILES = "webfiles-movie_night" 
+# Global Constant for Bucket Name(Google cloud storage)
+WEBFILES = "webfiles-movie_night"
 
 
 credentials_json = os.environ.get("CREDS")
@@ -44,15 +44,20 @@ def reuse_or_create_html_file():
     """
     Saves the existing HTML files into an empty list.
     Runs when there are HTML files present in the program directory
-    which is the Gitpod's workspace path.
-    If HTML files are already available, it gives the user the
-    possibility to perform operations on them, such as using the
-    existing file by giving a number related to the movie or
-    creating a new one.
+    which is using google cloud storage bucket.
+    If HTML files are already available in the bucket, it gives the
+    user the possibility to perform operations on them, such as
+    showing the file to the user and choosing them.
     """
     my_google_bucket = WEBFILES
+
+    # Accessing my google bucket via the client.bucket() method
     bucket = client.bucket(my_google_bucket)
+
+    # Getting a list of all the object in my google bucket(binaryLargeObjects)
     existing_files = list(bucket.list_blobs(prefix=""))
+
+    # List comprehension to filter the existing_files
     html_files = [blob.name for blob in existing_files if blob.name.endswith(".html")]
     if html_files:
         print("PLEASE BE RESPECTFUL, DO NOT SCRAP AGAIN IF A SAVED FILE ALREADY EXISTS!\n")
@@ -83,12 +88,12 @@ def reuse_or_create_html_file():
                 else:
                     break
         else:
-            print("Skipping viewing existing files.") 
+            print("Skipping viewing existing files.")
             return get_new_file_name()
     else:
         return get_new_file_name()
 
-   
+
 """
 CORE FUNCTIONS : [scrapMyWeb() and extract_movie_titles()]
 """
@@ -98,15 +103,18 @@ def scrapMyWeb(web_address, client):
     """
     Use the file path and the file (either newly created or exisiting),
     to write the content of the webpage in it.
-    """ 
+    """
     try:
         file_path = reuse_or_create_html_file()
         response = requests.get(web_address)
         response.raise_for_status()
-        #Upload to google cloud storage 
-        my_google_bucket = WEBFILES 
+
+        # Connects and access to google bucket
+        my_google_bucket = WEBFILES
         bucket = client.bucket(my_google_bucket)
         html_file = bucket.blob(file_path)
+
+        # Upload the webpage content as string in google storage
         html_file.upload_from_string(response.text)
 
         print(f"Downloaded webpage content uploaded to: gs://{my_google_bucket}/{file_path}\n")
@@ -120,15 +128,19 @@ def scrapMyWeb(web_address, client):
 def extract_movie_titles(file_path, client, bucket):
     """
     Use BeautifulSoup to read and return the movie
-    titles from the saved HTML file. Used inside the
-    scrapmyweb function to return the title names from
-    the saved file.
+    titles from the saved HTML file.
     """
     print("\n The Top 50 Best Movies of 2023 Are: \n ")
     try:
+        # Process the html file in the file path
         html_file = bucket.blob(file_path)
+
+        # Decodes the downloaded webpage content from string
         html_doc = html_file.download_as_string().decode('utf-8')
+
+        # Using bs4 for html parsing using html.parser
         soup = BeautifulSoup(html_doc, "html.parser")
+
         movies = soup.find_all('div', class_="article_movie_title")
         title_count = 0
         for movie in movies:
@@ -151,7 +163,6 @@ def main():
     """
     This function serves as the program's main entry point by
     prompting the user for either to run or exit the program.
-    It uses the scrapmyweb() function as its main logic.
     """
     web_address = "https://editorial.rottentomatoes.com/guide/best-movies-of-2023/"
 

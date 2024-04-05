@@ -10,12 +10,17 @@ from bs4 import BeautifulSoup
 # Global Constant for Bucket Name(Google cloud storage)
 WEBFILES = "webfiles-movie_night"
 
-
+# Get credentials
 credentials_json = os.environ.get("CREDS")
+
+# Convert json to object
 credentials_data = json.loads(credentials_json)
 creds = service_account.Credentials.from_service_account_info(credentials_data)
 
+# Get project-id
 project_id = os.environ.get("PROJECT_ID")
+
+# Create a client object
 client = storage.Client(credentials=creds, project=project_id)
 
 

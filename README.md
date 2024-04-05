@@ -61,6 +61,10 @@ The project currently contains five core functions that work together to achieve
 
 - **Start Up**
 
+![](readme_assets/startup.png)
+
+The startup screen prompts the user to either press 'Enter' to start the program or input 'exit' to quit. 
+
 # Flowchart
 
 

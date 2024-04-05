@@ -171,6 +171,7 @@ def main():
 
     user_input = input("Press Enter to begin the program or 'exit' to quit: \n ")
     if user_input.lower() == 'exit':
+        print("Exiting program. Goodbye!")
         exit()
     scrapMyWeb(web_address, client)
 

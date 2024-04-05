@@ -133,7 +133,6 @@ def extract_movie_titles(file_path, client, bucket):
     titles from the saved HTML file.
     """
     print("Extracting movie titles...\n") 
-    print("\n The Top 50 Best Movies of 2023 Are: \n ")
     try:
         # Process the html file in the file path
         html_file = bucket.blob(file_path)
@@ -145,11 +144,12 @@ def extract_movie_titles(file_path, client, bucket):
         soup = BeautifulSoup(html_doc, "html.parser")
 
         movies = soup.find_all('div', class_="article_movie_title")
+        print("\n The Top 50 Best Movies of 2023 Are: \n ")
         title_count = 0
         for movie in movies:
             title_element = movie.find('a')
             if title_element:
-                print(title_element.text.strip())
+                print(f"{title_count + 1}. {title_element.text.strip()}")
                 title_count += 1
                 if title_count >= 50:
                     break

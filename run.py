@@ -86,7 +86,7 @@ def reuse_or_create_html_file():
                     except ValueError:
                         print("Invalid input. Please enter a number or 'n'.")
                 else:
-                    break
+                    return get_new_file_name()
         else:
             print("Skipping viewing existing files.")
             return get_new_file_name()

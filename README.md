@@ -12,7 +12,7 @@
 
 # UX Design
 
-Since the application is currently command-line based, the UX focuses only on clarity, ease of use, and providing helpful feedback:
+Since the application is currently a simple command-line based, the UX focuses only on clarity of messages, ease of use:
 
 - **Intuitive Commands:** Provide a clean and clear interface and messages to guide users through filtering and selection.
 - **Informative Prompts:** Provide clear prompts to help users understand what input is expected at each stage.
@@ -59,11 +59,36 @@ The project currently contains five core functions that work together to achieve
 
 ### Existing Features
 
-- **Start Up**
+- **Start Up Screen**
 
 ![](readme_assets/startup.png)
 
 The startup screen prompts the user to either press 'Enter' to start the program or input 'exit' to quit. 
+
+- **User pressed 'Enter' and a existing html file is found**
+
+![](readme_assets/press-enter01.png)
+
+When user presses 'Enter' and existing .html files are found in the same directory, the user can choose to view them.
+
+- **User pressed 'Enter' and no existing html files are found**
+
+![](readme_assets/press-enter02.png)
+
+When user presses 'Enter' and existing .html files are not found in the same directory, the user can choose a file name to scrap the web content to.
+
+- **Viewing existing files**
+
+![](readme_assets/viewfiles.png)
+
+When existing files are found in the program directory, the user if chooses 'y', can view those files.
+
+- **Exiting**
+
+![](readme_assets/exit.png)
+
+The user on several stages during the entire program has been given the option to exit by simply typing 'exit'.
+
 
 # Flowchart
 

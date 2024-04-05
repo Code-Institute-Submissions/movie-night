@@ -1,76 +1,80 @@
-MOVIE NIGHT
+# Purpose
 
-This Python script helps you retrieve and display the top 50 best movies of 2023.
+- **Problem Statement:** Finding the right movie for a group of people can be challenging due to conflicting tastes and the vast number of options. Additionally, discovering interesting new movies within specific genres or based on mood can be time-consuming, especially when looking for the year's best releases.
 
-## How to use the program
+- **Solution:** This project provides a command-line tool that streamlines movie selection and discovery. It focuses on curating a list of the top 50 best movies from the previous year (2023), leverages web scraping to gather movie information, offers filtering/selection options, and presents the results in a user-friendly format.
 
-1. The program will prompt you to either press Enter to begin or type "exit" to quit.
+- **Key Objectives:**
 
-2. If you choose to continue, it will then:
+   * **Efficiency:** Make the movie selection process faster and more enjoyable, specifically for highlighting top releases.
+   * **Discovery:** Help users find acclaimed movies from the previous year.
 
-    a. Check if a previously downloaded HTML file exists.
 
-    b. If a file exists, it will ask you if you want to use it or create a new one.
+# UX Design
 
-    c. If no file exists, or you choose to create a new one, it will download the webpage content and save it as a new HTML file.
+Since the application is currently command-line based, the UX focuses only on clarity, ease of use, and providing helpful feedback:
 
-Finally, it will parse the saved HTML file and display the top 50 movie titles
+- **Intuitive Commands:** Provide a clean and clear interface and messages to guide users through filtering and selection.
+- **Informative Prompts:** Provide clear prompts to help users understand what input is expected at each stage.
+- **Error Handling:** Display helpful error messages if the user enters invalid input or encounters unexpected issues.
+- **Progress Indicators:** Let the user know the program is working (especially when fetching data from websites) to prevent confusion about whether it's running or stuck.
 
-## Features
 
-This script offers the following functionalities:
+# Features
 
-1. User-friendly prompts for starting the program and choosing file options.
-2. Ability to reuse previously downloaded webpage content (if available).
-3. Downloading the webpage content from a specified URL if no saved file exists.
-4. Parsing the downloaded HTML using BeautifulSoup to extract movie titles.
-5. Displaying the top 50 extracted movie titles.
+### Function Overview
 
-### Future features
+The project currently contains five core functions that work together to achieve its movie selection and discovery goals:
 
-1. Implement error handlings for situations when target website is changed.
-2. Ability to save the extracted movie title to a file.
+- **`get_new_file_name()`**
+    * **Purpose:** Interacts with the user to obtain a desired filename for storing scraped movie data.
+    * **Functionality:** Prompts the user for input, potentially includes validation to ensure a valid filename is provided.
 
-## Data Model
+- **`reuse_or_create_html_file()`**
+    * **Purpose:** Provides flexibility in managing scraped data by allowing the user to either reuse an existing HTML file or create a new one. 
+    * **Functionality:**  
+        *   Checks for existing HTML files. 
+        *   Presents the user with options to view existing files and select one or create a new file. 
 
-The script doesn't use a complex data model. It relies on:
+- **`scrapMyWeb()`** 
+    * **Purpose:**  Orchestrates the core scraping process and interaction with Google Cloud Storage.
+    * **Functionality:**
+        *   Fetches the webpage containing movie information.
+        *   Uploads the downloaded HTML contents to a  Google Cloud Storage bucket.
+        *   Calls the `extract_movie_titles` function to process the stored data.
 
-1. User input to choose between existing and new files.
-2. Downloaded or existing HTML file to store the webpage content.
-3. In-memory data structures (lists) to temporarily hold extracted movie titles.
+- **`extract_movie_titles()`**
+    * **Purpose:**  Isolates and extracts the actual movie titles from the larger HTML document.
+    * **Functionality:**
+        *   Accesses the HTML file stored in Google Cloud Storage.
+        *   Utilizes the BeautifulSoup library to parse the HTML structure. 
+        *   Implements specific logic to identify and retrieve the relevant movie title elements.
 
-## Testing
+- **`main()`**
+    * **Purpose:** Acts as the entry point to application, coordinating the execution of other functions.
+    * **Functionality:** 
+        *   Contains the 'url' of the website that is used for Scraping.
+        *   Prompts the user either to start the program or exit.
+        *   Initiates the web scraping and movie title extraction process.
 
-1. The code has been tested locally on my machine where local directory was used. Instead of giving an static location, i have used 
-   command .getcwd to get the working directory.
-2. The code is also tested on GitPod where i have replaced the .getcwd command by a static location of the workspace.
+### Existing Features
 
-## Bugs
+- **Start Up**
 
-1. No known critical bugs have been identified. However, as with any web scraping script, there's a chance the script might break if the target webpage structure changes significantly.
+# Flowchart
 
-2. To prevant this, there is already a saved .html file in the same directory which will enable the user to still get the movie title names.
 
-## Deployment
+# Technologies
 
-This project was deployed using Code Institute's mock terminal for Heroku.
+## Languages
 
-Steps for deployment:
-1. Fork or clone this repository.
-2. create a new Heroku app.
-3. Set the buildblocks to python and NodeJS in that order.
-4. click on deploy.
+## Program, frameworks , libraries
 
-## Credits
+# Data Model
 
-1. This script utilizes the following external libraries:
-    a. requests: Used for downloading webpage content.
-    b. BeautifulSoup: Used for parsing HTML content.
-2. Code Institute for the deployment environment. 
-3. Google to search for knowing the common commands that enable web scraping. 
-4. The code uses some of the already exisitng and highly common code snippet used for web scraping such as:
-    1. requests.get(web_address) ----> This uses the highly common requests library and its get() method.
-    2. BeautifulSoup(html_doc,"html.parser") ----> Another highly common class called 'Beautiful soup'.
-    3. with open() ----> Uses commonly used with and open function for automatic closing of file and uses 'mode' argument
-                        of the function to either read or write the named file. 
+
+# Deployment
+# Testing
+## Manual Testing and debugging
+# Credits
 

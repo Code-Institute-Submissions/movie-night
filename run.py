@@ -34,6 +34,7 @@ def get_new_file_name():
         save_location = input(
             "Enter the desired filename or exit the program (type 'exit'): \n")
         if save_location.lower() == 'exit':
+            print("Exiting program. Goodbye!")
             exit()
         elif not save_location.endswith(".html"):
             save_location += ".html"
@@ -104,6 +105,7 @@ def scrapMyWeb(web_address, client):
     Use the file path and the file (either newly created or exisiting),
     to write the content of the webpage in it.
     """
+    print("Scraping movie data, please wait...\n")
     try:
         file_path = reuse_or_create_html_file()
         response = requests.get(web_address)
@@ -130,6 +132,7 @@ def extract_movie_titles(file_path, client, bucket):
     Use BeautifulSoup to read and return the movie
     titles from the saved HTML file.
     """
+    print("Extracting movie titles...\n") 
     print("\n The Top 50 Best Movies of 2023 Are: \n ")
     try:
         # Process the html file in the file path

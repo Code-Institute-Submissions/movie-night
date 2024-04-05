@@ -289,3 +289,18 @@ Deploying the program on Heroku.
 
 # Credits
 
+- Python Standard Library for os: https://docs.python.org/3/library/os.html
+- Python Standard Library for time: https://docs.python.org/3/library/time.html
+- Python Standard Library for json: https://docs.python.org/3/library/json.html
+- Requests Library: https://requests.readthedocs.io/en/latest/
+- Google Cloud Authentication: https://googleapis.dev/python/google-api-core/1.21.0/auth.html
+- Google Cloud Storage Client Library: https://cloud.google.com/storage/docs/reference/libraries
+- What are buckets and how to create them: https://cloud.google.com/storage/docs/buckets
+- I have also used very commonly used code snippets for webscraping like:
+    **response = requests.get(web_address)**
+    **response.raise_for_status()**
+- Code institute for providing template and initial know-how to work with Heroku.
+
+# Acknowledgements
+
+Special thanks to my mentor ' Mr. Ronan McClelland' for providing me with various materials and his valuable pointers.
